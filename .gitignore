@@ -2,4 +2,3 @@ node_modules/
 .DS_Store
 Documents.txt
 .settings.xml
-*.swp

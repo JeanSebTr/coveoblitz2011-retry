@@ -1,13 +1,13 @@
-var zmq = require('zmq'),
-   sock = zmq.socket('pair');
+var zmq = require('zmq');
 
 var Class = function()
 {
    this.progress = 0;
    console.log('Intinialise search engine...'.blue);
-   sock.connect('tcp://127.0.0.1:3002');
-   sock.on('message', function(msg){
-      var data = JSON.parse(msg);
+   this.sock = zmq.socket('pair')
+   this.sock.connect('tcp://127.0.0.1:3002');
+   this.sock.on('message', function(msg){
+      var data = JSON.parse(msg.toString());
       if(data.cmd == 'progess')
       {
          this.indexProgress(data.read, data.total);
@@ -24,13 +24,17 @@ Class.prototype = {
    {
       this.progress = pos / total * 100;
    },
-   search: function()
+   search: function(qry, page)
    {
       
    },
    tags: function()
    {
-      
+      this.sock.send(JSON.stringify({
+         "cmd": "tags",
+         "offset": 0,
+         "length": 20
+      }));
    }
 };
 
