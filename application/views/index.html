@@ -6,7 +6,54 @@
 
 <aside>
     <h1>Tag Cloud</h1>
-    <div>
-        
+    <div id='tagcloud'>
+      
     </div>
 </aside>
+
+<script type="text/javascript">
+   function shuffle(array) {
+      var tmp, current, top = array.length;
+
+      if(top) while(--top) {
+         current = Math.floor(Math.random() * (top + 1));
+         tmp = array[current];
+         array[current] = array[top];
+         array[top] = tmp;
+      }
+
+      return array;
+   }
+
+   $(document).ready(function() {
+      var tags = [
+         {'name' : 'pizza', 'freq' : 14},
+         {'name' : 'hot-dog', 'freq' : 33},
+         {'name' : 'xxx', 'freq' : 69},
+         {'name' : 'sofa', 'freq' : 3},
+         {'name' : 'couch', 'freq' : 54},
+         {'name' : 'kitchen', 'freq' : 9},
+         {'name' : 'beer', 'freq' :156},
+         {'name' : 'beer', 'freq' :43},
+         {'name' : 'beer', 'freq' :12},
+         {'name' : 'beer', 'freq' :87},
+         {'name' : 'beer', 'freq' :56},
+         {'name' : 'beer', 'freq' :92},
+         {'name' : 'beer', 'freq' :53},
+         {'name' : 'beer', 'freq' :2},
+         {'name' : 'beer', 'freq' :67}
+      ];
+      console.dir(tags);
+      shuffle(tags);
+      console.dir(tags);
+      displayTagCloud(tags);
+   });
+
+   function displayTagCloud(tags){
+      $('#tagcloud').empty();
+      $("<ul>").attr("id", "taglist").css('max-width', '250px').css('list-style-type', 'none').css('margin', '0px').css('padding', '0px').appendTo("#tagcloud");
+      $.each(tags, function(i, val){
+         $('<li>').css('margin', '5px').css('float', 'left').css('font-size', (val.freq / 10 < 1) ? val.freq / 10 + 1 + "em": (val.freq / 10 > 2) ? "2em" : val.freq / 10 + "em").append(val.name).appendTo('#taglist');
+      });
+   }
+</script>
