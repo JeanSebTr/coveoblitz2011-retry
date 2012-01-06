@@ -33,16 +33,23 @@
    }
 
    $('#search').submit(function(e){
-      alert('TOTO a soumis le form');
-
-
+      var url = '/api/search?s=' + encodeURI($('#searchfield').val());
+      $.ajax({
+         url: url,
+         success: function(data){
+            
+            console.dir(data);
+            if(data && data.success){
+               console.dir(data.result);
+               //TODO do smoething nice with the data
+            }
+         }
+      });
 
       return false;
    });
 
    $(document).ready(function() {
-      //positionFooter();
-
       var tags = [
          {'name' : 'pizza', 'freq' : 14},
          {'name' : 'hot-dog', 'freq' : 33},
@@ -64,17 +71,23 @@
       shuffle(tags);
       console.dir(tags);
       displayTagCloud(tags);
+      updateProgress();
    });
 
-   function positionFooter(){
-      var page_height = $(document.body).height() - $(document.footer).height();
-      var window_height = $(window).height();
-      var difference = window_height - page_height;
-      if (difference < 0)
-         difference = 0;
-         console.log(difference);
-      $("footer").css({
-         "padding-top": difference + "px"})
+   function updateProgress(){
+      var url = '/api/progress';
+      $.ajax({
+         url: url,
+         success: function(data){
+            
+            console.dir(data);
+            if(data && data.success){
+               console.dir(data.result);
+               $('#progress-note').empty().append(data.result);
+            }
+         }
+      });
+
    }
 
    function displayTagCloud(tags){
