@@ -67,7 +67,21 @@ fs.stat(filename, function (err, stat) {
 
 //--- Communication ------------------------------------------------------------
 
-sock.on('message', function () {
+sock.on('message', function (data) {
+   console.log('>>', data.toString());
+   var json = JSON.parse(data.toString());
+
+   switch (json.cmd) {
+   case 'search':
+      var res = { results: {}, success: true };
+      for (var i=0; i<json.words.length; i++) {
+         var word = json.words[i];
+         var tmp = struct[word];
+         res.results[word] = tmp;
+      }
+      sock.send(JSON.stringify(res));
+      break;
+   }
 });
 
 //------------------------------------------------------------------------------
