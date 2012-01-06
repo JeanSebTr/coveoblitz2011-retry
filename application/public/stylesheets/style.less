@@ -45,11 +45,27 @@ nav{
         
     }
 
-    form input{
+    form{
+        input[type=image]{
+            border: none;
+            border-image: none;
+        }
+    }
+
+    #loupe{
+        width: 51px;
+        height: 54px;
+        vertical-align: middle;
+        border: none;
+        box-shadow: none;
+    }
+
+    #searchfield{
         width: 95%;
         height: 1.2em;
         font-size: 2.4em;
-        vertical-align:middle;
+        vertical-align: middle;
+        line-height: normal;
     }
 
     nav{
@@ -89,7 +105,7 @@ nav{
     }
     form{
         input{
-            max-width: 800px;   
+            max-width: 800px;
         }
     }
     div[role="content"]{
