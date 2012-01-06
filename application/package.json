@@ -4,6 +4,8 @@
   , "private": true
   , "dependencies": {
       "express": "2.5.0",
-      "ejs": ">= 0.6.1"
+      "ejs": ">= 0.6.1",
+      "less": "latest",
+      "zmq": "latest"
   }
 }
