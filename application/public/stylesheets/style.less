@@ -20,6 +20,10 @@ header[role="banner"]{
     min-height: 50px;
 }
 
+footer{
+    border: none;
+}
+
 nav{
     background-color:@gray;
     a {
@@ -41,6 +45,45 @@ nav{
         
     }
 
+    form{
+        input[type=image]{
+            border: none;
+            border-image: none;
+        }
+    }
+
+    #loupe{
+        width: 51px;
+        height: 54px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    #loupe input{
+        width: 35.7px;
+        height: 37.8px;
+        margin-left: 7.65px;
+        margin-right: 7.65px;
+        margin-top: 8.1px;
+        margin-bottom: 8.1px;
+        border: none;
+        box-shadow: none;
+    }
+
+    #loupe input:hover{
+        width: 51px;
+        height: 54px;
+        margin: auto;
+    }
+
+    #searchfield{
+        width: 95%;
+        height: 1.2em;
+        font-size: 2.4em;
+        vertical-align: middle;
+        line-height: normal;
+    }
+
     nav{
         a{
           display:block;  
@@ -49,6 +92,7 @@ nav{
 
     div[role="content"]{
         float:left;
+        width : 100%;
     }
     aside{
         float: left;
@@ -74,6 +118,11 @@ nav{
 @media screen and (min-width:1000px) {
     body{
         
+    }
+    form{
+        input{
+            max-width: 800px;
+        }
     }
     div[role="content"]{
         display: inline;
