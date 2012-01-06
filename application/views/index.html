@@ -33,9 +33,18 @@
    }
 
    $('#search').submit(function(e){
-      alert('TOTO a soumis le form');
-
-
+      var url = '/api/search?s=' + encodeURI($('#searchfield').val());
+      $.ajax({
+         url: url,
+         success: function(data){
+            
+            console.dir(data);
+            if(data && data.success){
+               console.dir(data.result);
+               //TODO do smoething nice with the data
+            }
+         }
+      });
 
       return false;
    });
@@ -62,7 +71,23 @@
       shuffle(tags);
       console.dir(tags);
       displayTagCloud(tags);
+      updateProgress();
    });
+
+   function updateProgress(){
+      var url = '/api/progress';
+      $.ajax({
+         url: url,
+         success: function(data){
+            
+            console.dir(data);
+            if(data && data.success){
+               console.dir(data.result);
+               $('#progress-note').empty().append(data.result);
+            }
+         }
+      });
+   }
 
    function displayTagCloud(tags){
       $('#tagcloud').empty();
