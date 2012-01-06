@@ -1,3 +1,5 @@
+// load first for a cute CLI :)
+var color   = require('./libs/colors.js');
 
 /**
  * Module dependencies.
