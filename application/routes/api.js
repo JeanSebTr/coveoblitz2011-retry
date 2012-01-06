@@ -7,7 +7,7 @@ module.exports = function(app, engine){
         res.render('index.html', { title : 'Home page with an incredible title'});
     });
     
-    app.get('/api/index' function(req, res){
+    app.get('/api/index', function(req, res){
       res.json({
          'success': true,
          'result': engine.progress
