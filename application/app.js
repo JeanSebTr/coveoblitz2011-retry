@@ -4,10 +4,35 @@ var color   = require('./libs/colors.js');
 /**
  * Module dependencies.
  */
-
+console.time('Loading dependencies'.blue);
+var fs = require('fs'),
+  path = require('path'),
+  less = require('less');
 var express = require('express');
-
 var app = module.exports = express.createServer();
+console.timeEnd('Loading dependencies'.blue);
+
+/**
+ * Compile Less CSS
+ */
+console.log('Compiling Less CSS...'.blue);
+var dir = __dirname+'/public/stylesheets/',
+  files = fs.readdirSync(dir);
+var f, lcss;
+for(f in files)
+{
+   console.log(path.extname(files[f]));
+  if(path.extname(files[f]) == '.less')
+  {
+    console.log('less file : ' + files[f].red);
+    lcss = fs.readFileSync(dir+files[f], 'utf8');
+    less.render(lcss, function(e, css)
+    {
+      fs.writeFileSync(dir+path.basename(files[f], '.less')+'.css', css, 'utf8');
+      console.log(' - Compiled : '.cyan+(dir+path.basename(files[f])).green)
+    });
+  }
+}
 
 // Configuration
 
@@ -33,4 +58,4 @@ app.configure('production', function(){
 require('./routes/default.js')(app);
 
 app.listen(3000);
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+console.log("Express server listening on port %s in %s mode", (app.address().port+'').green, app.settings.env.green);
