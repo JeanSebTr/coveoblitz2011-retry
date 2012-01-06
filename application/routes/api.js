@@ -19,7 +19,7 @@ module.exports = function(app, engine){
       }, 200);
    });
    
-   app.get('/api/index', function(req, res){
+   app.get('/api/progress', function(req, res){
       res.json({
          'success': true,
          'result': engine.progress
