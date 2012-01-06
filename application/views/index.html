@@ -54,7 +54,19 @@
       $('#tagcloud').empty();
       $("<ul>").attr("id", "taglist").css('max-width', '250px').css('list-style-type', 'none').css('margin', '0px').css('padding', '0px').appendTo("#tagcloud");
       $.each(tags, function(i, val){
-         $('<li>').css('margin', '5px').css('float', 'left').css('font-size', (val.freq / 10 < 1) ? val.freq / 10 + 1 + "em": (val.freq / 10 > 2) ? "2em" : val.freq / 10 + "em").append(val.name).appendTo('#taglist');
+         $('<li>').attr('data-val', val.name).attr('class', 'taglist-item').css('margin', '5px').css('float', 'left').css('font-size', (val.freq / 10 < 1) ? val.freq / 10 + 1 + "em": (val.freq / 10 > 2) ? "2em" : val.freq / 10 + "em").append(val.name).appendTo('#taglist');
+      });
+
+      $('.taglist-item').hover(function(e){
+         var fs = parseInt($(this).css('font-size').replace('px', ''));
+         $(this).css('font-size', fs * 1.2);
+      }, function(e){
+         var fs = parseInt($(this).css('font-size').replace('px', ''));
+         $(this).css('font-size', fs / 1.2);
+      });
+
+      $('.taglist-item').click(function(){
+         console.dir($(this).data);
       });
    }
 </script>
