@@ -5,11 +5,14 @@ var color   = require('./libs/colors.js');
  * Module dependencies.
  */
 console.time('Loading dependencies'.blue);
+
 var fs = require('fs'),
   path = require('path'),
   less = require('less');
 var express = require('express');
 var app = module.exports = express.createServer();
+var engine = new (require('./engine.js'))();
+
 console.timeEnd('Loading dependencies'.blue);
 
 /**
@@ -21,10 +24,8 @@ var dir = __dirname+'/public/stylesheets/',
 var f, lcss;
 for(f in files)
 {
-   console.log(path.extname(files[f]));
   if(path.extname(files[f]) == '.less')
   {
-    console.log('less file : ' + files[f].red);
     lcss = fs.readFileSync(dir+files[f], 'utf8');
     less.render(lcss, function(e, css)
     {
@@ -56,6 +57,7 @@ app.configure('production', function(){
 
 //Routing client
 require('./routes/default.js')(app);
+require('./routes/api.js')(app, engine);
 
 app.listen(3000);
 console.log("Express server listening on port %s in %s mode", (app.address().port+'').green, app.settings.env.green);
