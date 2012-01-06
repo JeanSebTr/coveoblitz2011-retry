@@ -11,6 +11,7 @@ var fs = require('fs'),
   less = require('less');
 var express = require('express');
 var app = module.exports = express.createServer();
+var io = require('socket.io').listen(app);
 var engine = new (require('./engine.js'))();
 
 console.timeEnd('Loading dependencies'.blue);
