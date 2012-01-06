@@ -12,7 +12,7 @@ var Class = function()
       {
          this.indexProgress(data.read, data.total);
       }
-      else if(data.cmd == 'progress')
+      else if(data.cmd == 'result')
       {
          
       }
