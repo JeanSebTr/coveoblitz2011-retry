@@ -12,32 +12,39 @@ img{
 
 body{
     margin: auto;
-    padding-left: 5%;
-    padding-right: 5%;
+    width: 70%;
+    max-width: 1400px;
+    max-height: 90%;
     background-color: @white;
 }
+
 header[role="banner"]{
     min-height: 50px;
 }
 
 footer{
+    
     border: none;
 }
 
 nav{
     background-color:@gray;
     a {
-       font-size: 1.5em;
+        font-size: 1.5em;
         margin-left: 10px;
         margin-right: 10px;
-        margin-top:5px;
-        margin-bottom:5px;
+        margin-top: 5px;
+        margin-bottom: 5px;
         text-decoration: none;
         color: @white;
         &:hover{
             color: @red;
         }
     }
+}
+
+.clearfix{
+    clear: both;
 }
 
 @media screen and (min-width:320px) {
@@ -70,14 +77,14 @@ nav{
         box-shadow: none;
     }
 
-    #loupe input:hover{
+    #loupe input:hover, input:focus, input:focus:hover{
         width: 51px;
         height: 54px;
         margin: auto;
     }
 
     #searchfield{
-        width: 95%;
+        width: 80%;
         height: 1.2em;
         font-size: 2.4em;
         vertical-align: middle;
@@ -91,8 +98,8 @@ nav{
     }
 
     div[role="content"]{
-        float:left;
-        width : 100%;
+        float: left;
+        width: 100%;
     }
     aside{
         float: left;
@@ -127,10 +134,9 @@ nav{
     div[role="content"]{
         display: inline;
         float : left;
-        width: 65%;
+        width: 75%;
     }
     aside{
-        margin-left:5%;
-        width:29%;
+        
     }
 }

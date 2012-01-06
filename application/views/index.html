@@ -1,6 +1,6 @@
 <div role="content">
     <form id="search">
-        <input id="searchfield" type="search" placeholder="Keywords!!" value="" />
+        <input id="searchfield" type="search" placeholder="Keywords!!!" value="" x-webkit-speech lang='en' onwebkitspeechchange="onChange()" />
         <div id="loupe">
         	<input type="image" src="../images/loupe.png" />
         </div>
@@ -15,6 +15,10 @@
 </aside>
 
 <script type="text/javascript">
+   function onChange(){
+      $('#search').submit();
+   }
+
    function shuffle(array) {
       var tmp, current, top = array.length;
 
@@ -27,6 +31,14 @@
 
       return array;
    }
+
+   $('#search').submit(function(e){
+      alert('TOTO a soumis le form');
+
+
+
+      return false;
+   });
 
    $(document).ready(function() {
       var tags = [
@@ -56,7 +68,22 @@
       $('#tagcloud').empty();
       $("<ul>").attr("id", "taglist").css('max-width', '250px').css('list-style-type', 'none').css('margin', '0px').css('padding', '0px').appendTo("#tagcloud");
       $.each(tags, function(i, val){
-         $('<li>').css('margin', '5px').css('float', 'left').css('font-size', (val.freq / 10 < 1) ? val.freq / 10 + 1 + "em": (val.freq / 10 > 2) ? "2em" : val.freq / 10 + "em").append(val.name).appendTo('#taglist');
+         $('<li>').attr('data-val', val.name).attr('class', 'taglist-item').css('margin', '5px').css('float', 'left').css('font-size', (val.freq / 10 < 1) ? val.freq / 10 + 1 + "em": (val.freq / 10 > 2) ? "2em" : val.freq / 10 + "em").append(val.name).appendTo('#taglist');
+      });
+
+      $('.taglist-item').hover(function(e){
+         var fs = parseInt($(this).css('font-size').replace('px', ''));
+         $(this).css('font-size', fs * 1.2);
+      }, function(e){
+         var fs = parseInt($(this).css('font-size').replace('px', ''));
+         $(this).css('font-size', fs / 1.2);
+      });
+
+      $('.taglist-item').click(function(){
+         var value = $(this).attr('data-val');
+         $('#searchfield').val(value);
+         $('#search').submit();
+
       });
    }
 </script>
