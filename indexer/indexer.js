@@ -11,8 +11,10 @@ var struct = {};
 
 var buf = '';
 var seek = 0;
+var start = null;
 
 fs.stat(filename, function (err, stat) {
+   start = new Date().getTime();
    var size = stat.size;
    var file = fs.createReadStream(filename, { flags: 'r', encoding: 'utf8' });
 
@@ -40,24 +42,30 @@ fs.stat(filename, function (err, stat) {
             process.exit();
          }
          for (var j=0; j<words.length; j++) {
-            //var word = words[j];
-            //if (struct[word] == undefined) {
-            //   struct[word] = { docs: {} };
-            //}
-            //if (!struct[word]['docs'][seekDoc]) {
-            //   struct[word]['docs'][seekDoc] = [];
-            //}
-            //struct[word]['docs'][seekDoc].push(seekWord);
-            //seekWord += word.length + 1;
+            var word = words[j].replace(/('|"|,|\.|\(|\)|;|:|[|]|{|})/gi, '').toLowerCase();
+            if (struct[word] == undefined || typeof struct[word] == 'function') {
+               struct[word] = { docs: {} };
+            }
+            try {
+            if (!struct[word]['docs'][seekDoc]) {
+               struct[word]['docs'][seekDoc] = [];
+            }
+            } catch (e) {
+               console.log(e, ' --> ', word);
+               process.exit();
+            }
+            struct[word]['docs'][seekDoc].push(seekWord);
+            seekWord += word.length + 1;
          }
 
          s += line.length + 2;
       }
-      console.log(s  + ' --> ' +  size + ' --> ' + Math.round(s/size*100)+'%');
+      console.log(s  + ' --> ' +  size + ' --> ' + Math.round(s/size*100)+'%', ((new Date().getTime()-start)/1000));
    });
 
    file.on('end', function (close) {
       console.log('to', JSON.stringify(struct['to']));
+      console.log('TIME: '+new Date().getTime() - start);
       //for (var i in struct) {
       //   console.log(i, JSON.stringify(struct[i]));
       //}
