@@ -29,15 +29,15 @@ module.exports = function(app, engine){
    app.get('/api/tags', function(req, res){
       res.json({
          'success': true,
-         'result': {
-            'tata':20,
-            'toto':18,
-            'blob':22,
-            'beer':15,
-            'deer':24,
-            'nodejs':25,
-            'coveo':21
-         }
+         'result': [
+            {'name' : 'pizza', 'freq' : 14},
+            {'name' : 'hot-dog', 'freq' : 33},
+            {'name' : 'xxx', 'freq' : 69},
+            {'name' : 'sofa', 'freq' : 3},
+            {'name' : 'couch', 'freq' : 54},
+            {'name' : 'kitchen', 'freq' : 9},
+            {'name' : 'beer', 'freq' :156},
+         ]
       }, 200);
    });
 };
