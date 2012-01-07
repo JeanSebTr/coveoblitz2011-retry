@@ -33,36 +33,52 @@
    }
 
    $('#search').submit(function(e){
-      alert('TOTO a soumis le form');
-
-
+      var url = '/api/search?s=' + encodeURI($('#searchfield').val());
+      $.ajax({
+         url: url,
+         success: function(data){
+            
+            console.dir(data);
+            if(data && data.success){
+               console.dir(data.result);
+               //TODO do smoething nice with the data
+            }
+         }
+      });
 
       return false;
    });
 
    $(document).ready(function() {
-      var tags = [
-         {'name' : 'pizza', 'freq' : 14},
-         {'name' : 'hot-dog', 'freq' : 33},
-         {'name' : 'xxx', 'freq' : 69},
-         {'name' : 'sofa', 'freq' : 3},
-         {'name' : 'couch', 'freq' : 54},
-         {'name' : 'kitchen', 'freq' : 9},
-         {'name' : 'beer', 'freq' :156},
-         {'name' : 'beer', 'freq' :43},
-         {'name' : 'beer', 'freq' :12},
-         {'name' : 'beer', 'freq' :87},
-         {'name' : 'beer', 'freq' :56},
-         {'name' : 'beer', 'freq' :92},
-         {'name' : 'beer', 'freq' :53},
-         {'name' : 'beer', 'freq' :2},
-         {'name' : 'beer', 'freq' :67}
-      ];
-      console.dir(tags);
-      shuffle(tags);
-      console.dir(tags);
-      displayTagCloud(tags);
+      var url = '/api/tags';
+      $.ajax({
+         url: url,
+         success: function(data){
+            
+            console.dir(data);
+            if(data && data.success){
+               console.dir(data.result);
+               var tags =data.result;
+               displayTagCloud(tags);
+            }
+         }
+      });
+      updateProgress();
    });
+
+   function updateProgress(){
+      var url = '/api/tags';
+      $.ajax({
+         url: url,
+         success: function(data){
+            if(data && data.success){
+               console.log('toot');
+               console.dir(data.result);
+               $('#progress-note').empty().append(data.result);
+            }
+         }
+      });
+   }
 
    function displayTagCloud(tags){
       $('#tagcloud').empty();
