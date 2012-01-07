@@ -1,12 +1,14 @@
 var net      = require('net')
   , fs       = require('fs')
+  , util     = require('util')
   , zmq      = require('zmq')
   , sock     = zmq.socket('pair')
   , filename = __dirname+'/Documents.txt';
 //sock.bindSync('tcp://127.0.0.1:3002');
 
 
-var words = {};
+var words = {},
+   docs = [];
 
 
 var buf = '';
@@ -15,7 +17,7 @@ var sk = 0, sb = 0, sd, sl = 0;
 fs.stat(filename, function (err, stat) {
 
    var file = fs.createReadStream(filename, { flags: 'r', encoding: 'utf8' });
-
+   var inc = stat.size/100, cur = 0;
    var i, j, k;
    var d = true, l = true, e = true;
    var doc, word, suf;
@@ -36,9 +38,7 @@ fs.stat(filename, function (err, stat) {
             if(i<0)
                break;
             sl++;
-            doc = buf.substring(sb, i);
-            //console.log('Document : '+doc);
-            sd = sk+sb;
+            sd = docs.push(buf.substring(sb, i)+":"+sk+sb) - 1;
             sb+=i+1;
             d=false;
          }
@@ -48,14 +48,18 @@ fs.stat(filename, function (err, stat) {
             e = (buf[i] == '\n' || buf[i] == '\r');// end line
             if(buf[i] == ' ' || e)
             {
-               word = buf.substring(sb, i);
-               suf = word.substr(-3);
-               if(words[suf] === undefined || typeof words[suf] == 'Function')
+               word = buf.substring(sb, i).toLowerCase();
+               suf = word.substr(0, 3);
+               word = word.substr(3);
+               if(words[suf] === undefined || typeof words[suf] == 'function')
                   words[suf] = {};
-               if(words[suf][word] === undefined || typeof words[suf][word] == 'Function')
-                  words[suf][word] = { pos:[], docs:{}};
-               words[suf][word].pos.push(sk+sb);
-               words[suf][word].docs[doc] = sd;
+               k = words[suf];
+               if(k[word] === undefined || typeof k[word] == 'function')
+                  k[word] = { pos:[], docs:[]};
+               k = k[word];
+               k.pos.push(sk+sb);
+               if(k.docs.indexOf(sd) == -1)
+                  k.docs.push(sd);
                sb=i+1;
             }
             if(e)
@@ -71,9 +75,11 @@ fs.stat(filename, function (err, stat) {
       e=true;
       buf = buf.substr(sb);
       sk+=sb;
-      k = sk/stat.size*100;
-      if(k > 20)
-         console.log(" - Progress : "+sk+" / "+stat.size+" = "+(k) + " ("+sl+") # "+process.memoryUsage().rss);
+      if(sk > cur)
+      {
+         cur += inc;
+         util.log(" - Progress : "+sk+" / "+stat.size+" = "+(sk/stat.size*100) + " ("+sl+") # "+process.memoryUsage().rss);
+      }
       //sock.send(JSON.stringify({ read: seek, total: stat.size, cmd: 'progress' }));
    });
 
