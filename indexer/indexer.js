@@ -13,44 +13,47 @@ var buf = '';
 var seek = 0;
 
 fs.stat(filename, function (err, stat) {
-
+   var size = stat.size;
    var file = fs.createReadStream(filename, { flags: 'r', encoding: 'utf8' });
+
+   var s = 0;
 
    file.on('data', function (data) {
       buf += data;
+      lines = buf.split('\r\n');
+      if (lines.length == 1) return;
 
-      var c = data.indexOf('\r\n');
-      var r = /(.*)\r\n/g;
-      while (line = r.exec(buf)) {
-         var input = line[1].replace('\r\n', '');
-         var s = seek + line['index'];
+      var lio = data.substr(data.lastIndexOf('\r\n')+2);
+      buf = lio;
+      // Each lines
+      for (var i=0; i<lines.length-1; i++) {
+         var line = lines[i];
+         var tmp = line.split('\t');
+         var docId = tmp[0];
+         var seekDoc = s;
+         var seekWord = seekDoc + 15;
 
-         var tmp      = input.split('\t')
-           , id       = tmp[0]
-           , doc      = tmp[1]
-           , reg      = /\b(\w+)\b/gi
-           , wordData = null;
-
-         // For each words...
-         while (wordData = reg.exec(doc)) {
-            var idx  = wordData['index'] + 15
-              , word = wordData[1];
-
-            if ( !(word in struct)) {
-               struct[word] = { docs: {} };
-            }
-            if (!struct[word]['docs'][s]) {
-               struct[word]['docs'][s] = [];
-            }
-            struct[word]['docs'][s].push(s+idx);
+         try {
+            var words = tmp[1].split(' ');
+         } catch (e) {
+            console.log(tmp, e);
+            process.exit();
          }
+         for (var j=0; j<words.length; j++) {
+            //var word = words[j];
+            //if (struct[word] == undefined) {
+            //   struct[word] = { docs: {} };
+            //}
+            //if (!struct[word]['docs'][seekDoc]) {
+            //   struct[word]['docs'][seekDoc] = [];
+            //}
+            //struct[word]['docs'][seekDoc].push(seekWord);
+            //seekWord += word.length + 1;
+         }
+
+         s += line.length + 2;
       }
-
-      seek += buf.lastIndexOf('\r\n') + 1;
-      buf = buf.substr(buf.lastIndexOf('\r\n') + 1);
-
-
-      sock.send(JSON.stringify({ read: seek, total: stat.size, cmd: 'progress' }));
+      console.log(s  + ' --> ' +  size + ' --> ' + Math.round(s/size*100)+'%');
    });
 
    file.on('end', function (close) {
