@@ -51,7 +51,7 @@ fs.stat(filename, function (err, stat) {
                word = buf.substring(sb, i).toLowerCase();
                suf = word.substr(0, 3);
                word = word.substr(3);
-               if(words[suf] === undefined || typeof words[suf] == 'function')
+               if(words[suf] === undefined)
                   words[suf] = {};
                k = words[suf];
                if(k[word] === undefined || typeof k[word] == 'function')
