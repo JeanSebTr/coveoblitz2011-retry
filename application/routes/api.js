@@ -2,8 +2,15 @@
  * GET home page.
  */
 
-module.exports = function(app, engine){
+module.exports = function(app, engine, io){
+   
+   /*io.sockets.on('connection', function (socket) {
+      engine.addClient(socket);
+      });
+   });*/
+   
    app.get('/api/search', function(req, res){
+      //engine.search();
       res.json({
          'success': true,
          'result': [
@@ -20,6 +27,8 @@ module.exports = function(app, engine){
    });
    
    app.get('/api/progress', function(req, res){
+      console.log('Fucking progress query');
+      console.log(engine);
       res.json({
          'success': true,
          'result': engine.progress

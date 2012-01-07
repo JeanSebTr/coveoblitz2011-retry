@@ -58,7 +58,7 @@ app.configure('production', function(){
 
 //Routing client
 require('./routes/default.js')(app);
-require('./routes/api.js')(app, engine);
+require('./routes/api.js')(app, engine, io);
 
 app.listen(3000);
 console.log("Express server listening on port %s in %s mode", (app.address().port+'').green, app.settings.env.green);
