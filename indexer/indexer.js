@@ -34,25 +34,14 @@ fs.stat(filename, function (err, stat) {
          var docId = tmp[0];
          var seekDoc = s;
          var seekWord = seekDoc + 15;
-
-         try {
-            var words = tmp[1].split(' ');
-         } catch (e) {
-            console.log(tmp, e);
-            process.exit();
-         }
+         var words = tmp[1].split(' ');
          for (var j=0; j<words.length; j++) {
             var word = words[j].replace(/('|"|,|\.|\(|\)|;|:|[|]|{|})/gi, '').toLowerCase();
             if (struct[word] == undefined || typeof struct[word] == 'function') {
                struct[word] = { docs: {} };
             }
-            try {
             if (!struct[word]['docs'][seekDoc]) {
                struct[word]['docs'][seekDoc] = [];
-            }
-            } catch (e) {
-               console.log(e, ' --> ', word);
-               process.exit();
             }
             struct[word]['docs'][seekDoc].push(seekWord);
             seekWord += word.length + 1;
